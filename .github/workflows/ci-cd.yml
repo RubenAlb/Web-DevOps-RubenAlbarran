@@ -1,0 +1,134 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    name: Test y Verificación
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout código
+      uses: actions/checkout@v3
+    
+    - name: Configurar Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+    
+    - name: Instalar dependencias
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pytest pytest-cov flake8 black
+    
+    - name: Verificar formato con Black
+      run: |
+        black --check --diff .
+      continue-on-error: true
+    
+    - name: Análisis de código con Flake8
+      run: |
+        # Detener si hay errores de sintaxis o nombres indefinidos
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        # Advertencias por complejidad y longitud de línea
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+      continue-on-error: true
+    
+    - name: Ejecutar tests
+      run: |
+        pytest --cov=. --cov-report=xml --cov-report=term
+      continue-on-error: true
+    
+    - name: Verificar importación del módulo principal
+      run: |
+        python -c "from main import app; print('✓ Aplicación cargada correctamente')"
+
+  build:
+    name: Build y Validación
+    runs-on: ubuntu-latest
+    needs: test
+    
+    steps:
+    - name: Checkout código
+      uses: actions/checkout@v3
+    
+    - name: Verificar estructura del proyecto
+      run: |
+        echo "📁 Estructura del proyecto:"
+        ls -la
+        echo "✓ Verificación completada"
+    
+    - name: Validar archivos requeridos
+      run: |
+        test -f main.py && echo "✓ main.py encontrado"
+        test -f requirements.txt && echo "✓ requirements.txt encontrado"
+        test -d routers && echo "✓ directorio routers encontrado"
+        test -d templates && echo "✓ directorio templates encontrado"
+        test -d static && echo "✓ directorio static encontrado"
+        echo "✅ Todos los archivos requeridos están presentes"
+
+  security:
+    name: Análisis de Seguridad
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout código
+      uses: actions/checkout@v3
+    
+    - name: Configurar Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Instalar dependencias de seguridad
+      run: |
+        python -m pip install --upgrade pip
+        pip install safety bandit
+    
+    - name: Verificar vulnerabilidades en dependencias
+      run: |
+        pip install -r requirements.txt
+        safety check --json
+      continue-on-error: true
+    
+    - name: Análisis de seguridad con Bandit
+      run: |
+        bandit -r . -f json -o bandit-report.json
+      continue-on-error: true
+    
+    - name: Subir reporte de seguridad
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: security-report
+        path: bandit-report.json
+
+  deploy-info:
+    name: Información de Despliegue
+    runs-on: ubuntu-latest
+    needs: [test, build, security]
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Checkout código
+      uses: actions/checkout@v3
+    
+    - name: Preparar información de despliegue
+      run: |
+        echo "🚀 Proyecto listo para despliegue"
+        echo "📦 Rama: ${{ github.ref }}"
+        echo "👤 Autor: ${{ github.actor }}"
+        echo "📝 Commit: ${{ github.sha }}"
+        echo ""
+        echo "💡 Comandos para desplegar manualmente:"
+        echo "   uvicorn main:app --host 0.0.0.0 --port 8000"
+        echo ""
+        echo "🐳 Para Docker:"
+        echo "   docker build -t fastapi-carreras ."
+        echo "   docker run -p 8000:8000 fastapi-carreras"

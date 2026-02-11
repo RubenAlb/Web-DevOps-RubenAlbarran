@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: fastapi-carreras
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./static:/app/static
+      - ./templates:/app/templates
+    restart: unless-stopped
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+
+  # Opcional: agregar servicio de MySQL si es necesario
+  # mysql:
+  #   image: mysql:8.0
+  #   container_name: mysql-carreras
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: root
+  #     MYSQL_DATABASE: carreras
+  #   ports:
+  #     - "3306:3306"
+  #   volumes:
+  #     - mysql_data:/var/lib/mysql
+  #   restart: unless-stopped
+
+# volumes:
+#   mysql_data:
