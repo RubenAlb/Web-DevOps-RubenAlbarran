@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Racing World{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/style.css') }}">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1>🏎️ Racing World</h1>
+            <p class="header-subtitle">Tu portal de carreras del mundo</p>
+            <button id="theme-toggle" class="theme-toggle" aria-label="Cambiar tema">
+                🌙
+            </button>
+        </div>
+    </header>
+
+    <nav>
+        <div class="nav-content">
+            <ul>
+                <li><a href="/">🏠 Inicio</a></li>
+                <li><a href="/carreras">🏁 Carreras</a></li>
+                <li><a href="/paises">🌍 Países</a></li>
+                <li><a href="/calendario">📅 Calendario</a></li>
+                <li><a href="/curiosidades">💡 Curiosidades</a></li>
+                {% if usuario %}
+                <li><a href="/mis-favoritos">❤️ Favoritos</a></li>
+                {% endif %}
+                <li><a href="/juegos">🎮 Juegos</a></li>
+                <li><a href="/api-docs">📡 API</a></li>
+                {% if usuario and usuario.is_admin %}
+                <li><a href="/admin/carreras" style="color: #f39c12;">⚙️ Admin</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </main>
+
+    <!-- Botón Scroll to Top -->
+    <button id="scroll-to-top" class="scroll-to-top" aria-label="Volver arriba">
+        ⬆️
+    </button>
+
+    <!-- Toast Notifications Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <footer>
+        <div class="footer-content">
+            <p><strong>Racing World</strong> - La enciclopedia de carreras más completa</p>
+            <hr class="footer-divider">
+            <div class="footer-info">
+                <span>📧 info@racingworld.com</span>
+                <span>🌐 www.racingworld.com</span>
+                <span>© 2026 Racing World</span>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', path='/js/main.js') }}"></script>
+    {% block scripts %}
+    {% endblock %}
+</body>
+</html>

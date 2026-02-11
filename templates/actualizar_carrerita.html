@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actualizar Carrerita - Gestión de Carreritas</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <h1>🎓 Sistema de Gestión de Carreritas</h1>
+            <p class="header-subtitle">Administra las carreras de tu institución</p>
+        </div>
+    </header>
+
+    <!-- Navegación -->
+    <nav>
+        <div class="nav-content">
+            <ul>
+                <li><a href="/">🏠 Inicio</a></li>
+                <li><a href="/carreritas">📋 Ver Carreritas</a></li>
+                <li><a href="/insert_carrerita">➕ Insertar</a></li>
+                <li><a href="/actualizar_carrerita" class="active">✏️ Actualizar</a></li>
+                <li><a href="/borrar_carrerita">🗑️ Borrar</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Contenido Principal -->
+    <main>
+        <div class="container">
+            <div class="content-wrapper">
+                <h1 class="page-title">✏️ Actualizar Carrerita</h1>
+                
+                {% if carrerita %}
+                <form action="/do_actualizar_carrerita" method="post">
+                    <input type="hidden" name="id" value="{{ carrerita.id }}">
+                    
+                    <div class="form-group">
+                        <label for="id">ID (no editable):</label>
+                        <input type="text" id="id" value="{{ carrerita.id }}" disabled>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="nombre_carrera">Nombre de Carrera:</label>
+                        <input type="text" id="nombre_carrera" name="nombre_carrera" value="{{ carrerita.nombre_carrera }}" required maxlength="100">
+                    </div>
+                    
+                    <button type="submit">✓ Actualizar Carrerita</button>
+                </form>
+                {% else %}
+                <h2>Selecciona una Carrerita para actualizar</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre de Carrera</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for c in carreritas %}
+                        <tr>
+                            <td>{{ c.id }}</td>
+                            <td>{{ c.nombre_carrera }}</td>
+                            <td><a href="/actualizar_carrerita?id={{ c.id }}">✏️ Editar</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% endif %}
+                
+                <br>
+                <a href="/" class="link-button">⬅️ Volver al menú principal</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Sistema de Gestión de Carreritas - Rubén Albarrán</p>
+            <hr class="footer-divider">
+            <div class="footer-info">
+                <span>FastAPI + Python</span>
+                <span>|</span>
+                <span>CRUD Simple</span>
+                <span>|</span>
+                <span>Versión 1.0</span>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

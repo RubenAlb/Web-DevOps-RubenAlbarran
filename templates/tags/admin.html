@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block title %}Administrar Etiquetas - Racing World{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mb-4">
+                <i class="fas fa-cog"></i> Administrar Etiquetas
+            </h1>
+            
+            <!-- Formulario para crear nueva etiqueta -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-plus"></i> Crear Nueva Etiqueta</h5>
+                </div>
+                <div class="card-body">
+                    <form action="/tags/admin/crear" method="POST">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="nombre" class="form-label">Nombre de la Etiqueta</label>
+                                    <input type="text" class="form-control" id="nombre" name="nombre" required>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="color" class="form-label">Color</label>
+                                    <input type="color" class="form-control form-control-color" id="color" name="color" value="#007bff">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">&nbsp;</label>
+                                <button type="submit" class="btn btn-success w-100">
+                                    <i class="fas fa-save"></i> Crear
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Lista de etiquetas existentes -->
+            <div class="card">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0"><i class="fas fa-list"></i> Etiquetas Existentes</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombre</th>
+                                    <th>Color</th>
+                                    <th>Vista Previa</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if tags %}
+                                    {% for tag in tags %}
+                                    <tr>
+                                        <td>{{ tag.id }}</td>
+                                        <td>
+                                            <input type="text" class="form-control form-control-sm" 
+                                                   id="nombre_{{ tag.id }}" value="{{ tag.nombre }}">
+                                        </td>
+                                        <td>
+                                            <input type="color" class="form-control form-control-color form-control-sm" 
+                                                   id="color_{{ tag.id }}" value="{{ tag.color }}">
+                                        </td>
+                                        <td>
+                                            <span class="badge" style="background-color: {{ tag.color }}">
+                                                <i class="fas fa-tag"></i> {{ tag.nombre }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <form action="/tags/admin/{{ tag.id }}/actualizar" method="POST" class="d-inline">
+                                                <input type="hidden" name="nombre" id="hidden_nombre_{{ tag.id }}">
+                                                <input type="hidden" name="color" id="hidden_color_{{ tag.id }}">
+                                                <button type="submit" class="btn btn-warning btn-sm" 
+                                                        onclick="document.getElementById('hidden_nombre_{{ tag.id }}').value = document.getElementById('nombre_{{ tag.id }}').value; document.getElementById('hidden_color_{{ tag.id }}').value = document.getElementById('color_{{ tag.id }}').value;">
+                                                    <i class="fas fa-save"></i> Guardar
+                                                </button>
+                                            </form>
+                                            
+                                            <form action="/tags/admin/{{ tag.id }}/eliminar" method="POST" class="d-inline"
+                                                  onsubmit="return confirm('¿Estás seguro de eliminar esta etiqueta? Se eliminará de todas las carreras.');">
+                                                <button type="submit" class="btn btn-danger btn-sm">
+                                                    <i class="fas fa-trash"></i> Eliminar
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="5" class="text-center">No hay etiquetas creadas.</td>
+                                    </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-4">
+                <a href="/admin/carreras" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Volver al Panel de Administración
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

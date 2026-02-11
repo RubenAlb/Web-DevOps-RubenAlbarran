@@ -1,0 +1,202 @@
+{% extends "base.html" %}
+
+{% block title %}{{ accion }} Carrera - Racing World{% endblock %}
+
+{% block content %}
+<div class="form-page">
+    <h1 class="page-title">🏁 {{ accion }} Carrera</h1>
+
+    <div class="form-container">
+        {% if carrera %}
+        <form method="POST" action="/admin/carreras/{{ carrera.id }}/editar">
+        {% else %}
+        <form method="POST" action="/admin/carreras/nueva">
+        {% endif %}
+            
+            <div class="form-group">
+                <label for="nombre">Nombre de la Carrera *</label>
+                <input type="text" 
+                       id="nombre" 
+                       name="nombre" 
+                       value="{{ carrera.nombre if carrera else '' }}" 
+                       required
+                       placeholder="Ej: Gran Premio de Monaco">
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="pais">País *</label>
+                    <input type="text" 
+                           id="pais" 
+                           name="pais" 
+                           value="{{ carrera.pais if carrera else '' }}" 
+                           required
+                           placeholder="Ej: Monaco">
+                </div>
+
+                <div class="form-group">
+                    <label for="ciudad">Ciudad *</label>
+                    <input type="text" 
+                           id="ciudad" 
+                           name="ciudad" 
+                           value="{{ carrera.ciudad if carrera else '' }}" 
+                           required
+                           placeholder="Ej: Monte Carlo">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="categoria">Categoría *</label>
+                    <select id="categoria" name="categoria" required>
+                        <option value="">Selecciona una categoría</option>
+                        <option value="F1" {% if carrera and carrera.categoria == 'F1' %}selected{% endif %}>Fórmula 1</option>
+                        <option value="Rally" {% if carrera and carrera.categoria == 'Rally' %}selected{% endif %}>Rally</option>
+                        <option value="Resistencia" {% if carrera and carrera.categoria == 'Resistencia' %}selected{% endif %}>Resistencia</option>
+                        <option value="Montaña" {% if carrera and carrera.categoria == 'Montaña' %}selected{% endif %}>Montaña</option>
+                        <option value="GT" {% if carrera and carrera.categoria == 'GT' %}selected{% endif %}>GT</option>
+                        <option value="Turismos" {% if carrera and carrera.categoria == 'Turismos' %}selected{% endif %}>Turismos</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="longitud_km">Longitud (km) *</label>
+                    <input type="number" 
+                           id="longitud_km" 
+                           name="longitud_km" 
+                           step="0.001"
+                           value="{{ carrera.longitud_circuito if carrera else '' }}" 
+                           required
+                           placeholder="Ej: 3.337">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="descripcion">Descripción *</label>
+                <textarea id="descripcion" 
+                          name="descripcion" 
+                          rows="6" 
+                          required
+                          placeholder="Describe la carrera, su historia, características especiales...">{{ carrera.descripcion if carrera else '' }}</textarea>
+            </div>
+
+            {% if carrera %}
+            <!-- Sección de Etiquetas -->
+            <div class="form-group">
+                <label>🏷️ Etiquetas</label>
+                
+                <!-- Etiquetas actuales -->
+                {% if carrera_tags %}
+                <div class="mb-2">
+                    <strong>Etiquetas actuales:</strong><br>
+                    {% for tag in carrera_tags %}
+                    <form method="POST" action="/tags/admin/carrera/{{ carrera.id }}/quitar/{{ tag.id }}" style="display: inline;">
+                        <span class="badge" style="background-color: {{ tag.color }}; margin: 2px;">
+                            <i class="fas fa-tag"></i> {{ tag.nombre }}
+                            <button type="submit" class="btn btn-link btn-sm text-white p-0 ms-1" 
+                                    style="text-decoration: none; font-size: 0.8rem;"
+                                    onclick="return confirm('¿Quitar esta etiqueta?');">
+                                ✕
+                            </button>
+                        </span>
+                    </form>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                
+                <!-- Agregar nueva etiqueta -->
+                <form method="POST" action="/tags/admin/carrera/{{ carrera.id }}/agregar" class="d-inline-flex align-items-center">
+                    <select name="tag_id" class="form-control form-control-sm me-2" style="width: auto;">
+                        <option value="">Seleccionar etiqueta...</option>
+                        {% for tag in todos_tags %}
+                        <option value="{{ tag.id }}">{{ tag.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit" class="btn btn-success btn-sm">
+                        <i class="fas fa-plus"></i> Agregar
+                    </button>
+                </form>
+                
+                <div class="mt-2">
+                    <a href="/tags/admin/gestionar" class="btn btn-sm btn-secondary">
+                        <i class="fas fa-cog"></i> Gestionar Etiquetas
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                    {% if carrera %}
+                    💾 Actualizar Carrera
+                    {% else %}
+                    ➕ Crear Carrera
+                    {% endif %}
+                </button>
+                <a href="/admin/carreras" class="btn btn-secondary">
+                    ❌ Cancelar
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+.form-page {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.form-actions .btn {
+    min-width: 180px;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+@media (max-width: 768px) {
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .form-actions .btn {
+        width: 100%;
+    }
+}
+</style>
+
+{% block scripts %}
+<script>
+// Validación adicional del formulario
+document.querySelector('form').addEventListener('submit', function(e) {
+    const longitud = parseFloat(document.getElementById('longitud_km').value);
+    
+    if (longitud <= 0) {
+        e.preventDefault();
+        alert('La longitud debe ser mayor que 0 km');
+        return false;
+    }
+    
+    if (longitud > 1000) {
+        if (!confirm('La longitud parece muy grande (más de 1000 km). ¿Estás seguro?')) {
+            e.preventDefault();
+            return false;
+        }
+    }
+});
+</script>
+{% endblock %}
+{% endblock %}

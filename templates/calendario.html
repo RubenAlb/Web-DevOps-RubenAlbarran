@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block title %}Calendario - Racing World{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h1>📅 Calendario de Carreras 2026</h1>
+    <p>Próximas carreras y eventos del automovilismo mundial</p>
+</div>
+
+{% if proximo_evento %}
+<div class="content-wrapper">
+    <div class="cuenta-regresiva">
+        <h2>⏱️ Próximo Evento</h2>
+        <div class="evento-destacado">
+            <h3>{{ proximo_evento.carrera_nombre }}</h3>
+            <p class="evento-pais">📍 {{ proximo_evento.pais }}</p>
+            <p class="evento-tipo">
+                <span class="badge badge-primary">{{ proximo_evento.tipo_evento|capitalize }}</span>
+                <span class="badge badge-info">{{ proximo_evento.categoria }}</span>
+            </p>
+            <div class="countdown">
+                <div class="countdown-box">
+                    <div class="countdown-number">{{ cuenta_regresiva }}</div>
+                    <div class="countdown-label">días</div>
+                </div>
+            </div>
+            <p class="evento-fecha">
+                📅 {{ proximo_evento.fecha_evento.strftime('%d de %B, %Y') if proximo_evento.fecha_evento else 'Fecha por confirmar' }}
+                {% if proximo_evento.hora_evento %}
+                    🕐 {{ proximo_evento.hora_evento.strftime('%H:%M')}}
+                {% endif %}
+            </p>
+            <a href="/carreras/{{ proximo_evento.carrera_id }}" class="btn btn-primary mt-2">Ver Detalles de la Carrera</a>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<div class="content-wrapper mt-4">
+    <h2 class="page-title">🏁 Próximos Eventos</h2>
+    <div class="calendario-grid">
+        {% if eventos_proximos %}
+            {% for evento in eventos_proximos %}
+            <div class="evento-card fade-in">
+                <div class="evento-fecha-box">
+                    <div class="evento-dia">{{ evento.fecha_evento.strftime('%d') if evento.fecha_evento else '??' }}</div>
+                    <div class="evento-mes">{{ evento.fecha_evento.strftime('%b') if evento.fecha_evento else '???' }}</div>
+                </div>
+                <div class="evento-info">
+                    <h3>{{ evento.carrera_nombre }}</h3>
+                    <p>📍 {{ evento.pais }}</p>
+                    <p>
+                        <span class="badge badge-primary">{{ evento.tipo_evento|capitalize }}</span>
+                        <span class="badge badge-info">{{ evento.categoria }}</span>
+                    </p>
+                    {% if evento.hora_evento %}
+                    <p class="evento-hora">🕐 {{ evento.hora_evento.strftime('%H:%M') }}</p>
+                    {% endif %}
+                    {% if evento.descripcion %}
+                    <p class="evento-descripcion">{{ evento.descripcion }}</p>
+                    {% endif %}
+                </div>
+                <div class="evento-actions">
+                    <a href="/carreras/{{ evento.carrera_id }}" class="btn btn-primary btn-sm">Ver Carrera</a>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p class="text-center mt-4">No hay eventos próximos programados.</p>
+        {% endif %}
+    </div>
+</div>
+
+{% if eventos_pasados %}
+<div class="content-wrapper mt-4">
+    <h2 class="page-title">📜 Eventos Recientes</h2>
+    <div class="eventos-pasados-lista">
+        {% for evento in eventos_pasados %}
+        <div class="evento-pasado-item">
+            <span class="evento-completed">✅</span>
+            <div class="evento-pasado-info">
+                <strong>{{ evento.carrera_nombre }}</strong>
+                <span class="evento-pasado-tipo">- {{ evento.tipo_evento|capitalize }}</span>
+                <span class="evento-pasado-fecha">{{ evento.fecha_evento.strftime('%d/%m/%Y') if evento.fecha_evento else 'Fecha desconocida' }}</span>
+            </div>
+            <a href="/carreras/{{ evento.carrera_id }}" class="btn btn-secondary btn-sm">Ver Resultados</a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Actualizar cuenta regresiva cada segundo
+{% if cuenta_regresiva is not none %}
+let diasRestantes = {{ cuenta_regresiva }};
+const countdownElement = document.querySelector('.countdown-number');
+
+function actualizarCuentaRegresiva() {
+    // Esta es una versión simplificada, en producción calcularías tiempo real
+    if (countdownElement) {
+        countdownElement.textContent = diasRestantes;
+    }
+}
+
+setInterval(actualizarCuentaRegresiva, 1000);
+{% endif %}
+</script>
+{% endblock %}

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1>🎓 Sistema de Gestión de Carreritas</h1>
+            <p class="header-subtitle">Iniciar Sesión</p>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="content-wrapper" style="max-width: 500px; margin: 0 auto;">
+                <h1 class="page-title">🔐 Iniciar Sesión</h1>
+                
+                {% if error %}
+                <div style="background-color: #f8d7da; color: #721c24; padding: 15px; border-radius: 5px; margin-bottom: 20px; border: 1px solid #f5c6cb;">
+                    <p style="margin: 0;"><strong>⚠️ Error:</strong> {{ error }}</p>
+                </div>
+                {% endif %}
+
+                <form action="/auth/login" method="post" style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                    <div style="margin-bottom: 20px;">
+                        <label for="username" style="display: block; margin-bottom: 8px; font-weight: bold; color: #333;">Usuario:</label>
+                        <input type="text" id="username" name="username" required 
+                               style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; box-sizing: border-box;">
+                    </div>
+                    
+                    <div style="margin-bottom: 25px;">
+                        <label for="password" style="display: block; margin-bottom: 8px; font-weight: bold; color: #333;">Contraseña:</label>
+                        <input type="password" id="password" name="password" required 
+                               style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; box-sizing: border-box;">
+                    </div>
+                    
+                    <button type="submit" style="width: 100%; padding: 12px; background-color: #007bff; color: white; border: none; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer;">
+                        ✓ Iniciar Sesión
+                    </button>
+                </form>
+                
+                <div style="text-align: center; margin-top: 20px;">
+                    <p>¿No tienes cuenta? <a href="/auth/register" style="color: #007bff; text-decoration: none; font-weight: bold;">Regístrate aquí</a></p>
+                    <a href="/" style="display: inline-block; margin-top: 15px; color: #007bff; text-decoration: none;">⬅️ Volver al inicio</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Sistema de Gestión de Carreritas - Rubén Albarrán</p>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% block title %}Inicio - Racing World{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h1>🏁 Bienvenido a Racing World</h1>
+    <p>Tu portal completo de información sobre carreras del mundo</p>
+    {% if usuario %}
+    <p class="mt-2" style="opacity: 0.9;">👤 Bienvenido, <strong>{{ usuario.username }}</strong> 
+    {% if usuario.is_admin %}<span style="color: #ffd700;">⭐ (Administrador)</span>{% else %}<span>(Usuario)</span>{% endif %}
+    | <a href="/auth/logout" style="color: white; text-decoration: underline;">Cerrar Sesión</a></p>
+    {% else %}
+    <p class="mt-2" style="opacity: 0.9;"><a href="/auth/login" style="color: white; text-decoration: underline;">🔐 Iniciar Sesión</a> | <a href="/auth/register" style="color: white; text-decoration: underline;">📝 Registrarse</a></p>
+    {% endif %}
+</div>
+
+<div class="cards-grid">
+    <div class="card fade-in">
+        <div class="card-header">
+            <h2 class="card-title">🏁 Carreras</h2>
+            <span class="card-icon">🏎️</span>
+        </div>
+        <div class="card-body">
+            <p>Explora las carreras más emocionantes del mundo. Descubre circuitos legendarios, récords históricos y todo sobre cada competición.</p>
+        </div>
+        <div class="btn-group">
+            <a href="/carreras" class="btn btn-primary">Explorar Carreras</a>
+        </div>
+    </div>
+
+    <div class="card fade-in">
+        <div class="card-header">
+            <h2 class="card-title">🌍 Países</h2>
+            <span class="card-icon">🗺️</span>
+        </div>
+        <div class="card-body">
+            <p>Conoce los países que albergan las carreras más importantes. Historia, estadísticas y datos fascinantes de cada nación.</p>
+        </div>
+        <div class="btn-group">
+            <a href="/paises" class="btn btn-primary">Ver Países</a>
+        </div>
+    </div>
+
+    <div class="card fade-in">
+        <div class="card-header">
+            <h2 class="card-title">💡 Curiosidades</h2>
+            <span class="card-icon">🎯</span>
+        </div>
+        <div class="card-body">
+            <p>Descubre datos fascinantes, récords increíbles y curiosidades del mundo del automovilismo que te sorprenderán.</p>
+        </div>
+        <div class="btn-group">
+            <a href="/curiosidades" class="btn btn-primary">Descubrir Más</a>
+        </div>
+    </div>
+
+    <div class="card fade-in">
+        <div class="card-header">
+            <h2 class="card-title">📋 Gestión</h2>
+            <span class="card-icon">⚙️</span>
+        </div>
+        <div class="card-body">
+            <p>Administra las carreras del sistema. Ver, crear, editar y eliminar información de carreras.</p>
+        </div>
+        <div class="btn-group">
+            <a href="/carreritas" class="btn btn-primary">Ver Carreritas</a>
+        </div>
+    </div>
+
+    <div class="card fade-in">
+        <div class="card-header">
+            <h2 class="card-title">🎮 Juegos</h2>
+            <span class="card-icon">🕹️</span>
+        </div>
+        <div class="card-body">
+            <p>Diviértete con nuestros juegos interactivos sobre carreras y pon a prueba tus conocimientos.</p>
+        </div>
+        <div class="btn-group">
+            <a href="/juegos" class="btn btn-primary">Jugar Ahora</a>
+        </div>
+    </div>
+
+    <div class="card fade-in">
+        <div class="card-header">
+            <h2 class="card-title">📊 Estadísticas</h2>
+            <span class="card-icon">📈</span>
+        </div>
+        <div class="card-body">
+            <p>Analiza datos, gráficos y métricas sobre las carreras y usuarios del sistema.</p>
+        </div>
+        <div class="btn-group">
+            <a href="/estadisticas" class="btn btn-primary">Ver Estadísticas</a>
+        </div>
+    </div>
+
+    <div class="card fade-in">
+        <div class="card-header">
+            <h2 class="card-title">📡 API REST</h2>
+            <span class="card-icon">💻</span>
+        </div>
+        <div class="card-body">
+            <p>Accede a los datos de Racing World mediante nuestra API REST. Documentación completa y ejemplos de uso.</p>
+        </div>
+        <div class="btn-group">
+            <a href="/api-docs" class="btn btn-primary">Ver Documentación</a>
+            <a href="/docs" class="btn btn-secondary">Swagger UI</a>
+        </div>
+    </div>
+</div>
+
+<div class="content-wrapper mt-4">
+    <h2 class="page-title">🏆 Lo Más Destacado</h2>
+    <div class="curiosidades-grid">
+        <div class="curiosidad-card">
+            <div class="curiosidad-icon">🏎️</div>
+            <h3>Velocidad Extrema</h3>
+            <p>Los autos de F1 pueden alcanzar más de 370 km/h en pista.</p>
+        </div>
+        <div class="curiosidad-card">
+            <div class="curiosidad-icon">🌍</div>
+            <h3>Global</h3>
+            <p>Más de 50 países han albergado carreras de Grand Prix.</p>
+        </div>
+        <div class="curiosidad-card">
+            <div class="curiosidad-icon">⚡</div>
+            <h3>Tecnología</h3>
+            <p>Los motores modernos generan más de 1,000 HP.</p>
+        </div>
+        <div class="curiosidad-card">
+            <div class="curiosidad-icon">📅</div>
+            <h3>Historia</h3>
+            <p>La primera carrera de Grand Prix fue en 1906.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

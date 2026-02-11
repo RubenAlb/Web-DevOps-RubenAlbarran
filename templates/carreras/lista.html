@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}Carreras - Racing World{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h1>🏁 Carreras del Mundo</h1>
+    <p>Descubre las carreras más emocionantes de todos los continentes</p>
+</div>
+
+<!-- Búsqueda y Filtros -->
+<div class="content-wrapper">
+    <h3>🔍 Buscar y Filtrar</h3>
+    <form method="get" action="/carreras" class="search-form">
+        <div class="form-row">
+            <div class="form-group">
+                <label for="search">Buscar:</label>
+                <input type="text" id="search" name="search" placeholder="Nombre, país o ciudad..." value="{{ search or '' }}">
+            </div>
+            
+            <div class="form-group">
+                <label for="categoria">Categoría:</label>
+                <select id="categoria" name="categoria">
+                    <option value="">Todas las categorías</option>
+                    {% for cat in categorias %}
+                    <option value="{{ cat }}" {% if categoria_filtro == cat %}selected{% endif %}>{{ cat }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="pais">País:</label>
+                <select id="pais" name="pais">
+                    <option value="">Todos los países</option>
+                    {% for p in paises %}
+                    <option value="{{ p }}" {% if pais_filtro == p %}selected{% endif %}>{{ p }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Buscar</button>
+                <a href="/carreras" class="btn btn-secondary">Limpiar</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="carreras-list">
+    {% if carreras %}
+        {% for carrera in carreras %}
+        <div class="carrera-card fade-in">
+            <div class="carrera-image">
+                🏎️
+            </div>
+            <div class="carrera-content">
+                <h2 class="carrera-nombre">{{ carrera.nombre }}</h2>
+                <p class="carrera-pais">📍 {{ carrera.pais }}</p>
+                <p>{{ carrera.descripcion_corta }}</p>
+                <div class="carrera-meta">
+                    <span class="badge badge-primary">{{ carrera.categoria }}</span>
+                    <span>📅 {{ carrera.fecha }}</span>
+                </div>
+                <div class="btn-group mt-2">
+                    <a href="/carreras/{{ carrera.id }}" class="btn btn-primary">Ver Detalles</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="content-wrapper text-center">
+            <p>No se encontraron carreras con los filtros seleccionados.</p>
+            <a href="/carreras" class="btn btn-primary mt-2">Ver todas las carreras</a>
+        </div>
+    {% endif %}
+</div>
+
+{% if usuario and usuario.is_admin %}
+<div class="text-center mt-4">
+    <a href="/admin/carreras/nueva" class="btn btn-success">➕ Agregar Nueva Carrera</a>
+</div>
+{% endif %}
+{% endblock %}

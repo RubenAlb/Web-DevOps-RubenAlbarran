@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+
+{% block title %}Estadísticas - Racing World{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h1>📊 Estadísticas y Análisis</h1>
+    <p>Datos y métricas del mundo de las carreras</p>
+</div>
+
+<!-- Métricas Principales -->
+<div class="stats-overview">
+    <div class="stat-card fade-in">
+        <div class="stat-icon">🏁</div>
+        <div class="stat-number">{{ total_carreras }}</div>
+        <div class="stat-label">Carreras Totales</div>
+    </div>
+    
+    <div class="stat-card fade-in">
+        <div class="stat-icon">👥</div>
+        <div class="stat-number">{{ total_usuarios }}</div>
+        <div class="stat-label">Usuarios Registrados</div>
+    </div>
+    
+    <div class="stat-card fade-in">
+        <div class="stat-icon">💬</div>
+        <div class="stat-number">{{ total_comentarios }}</div>
+        <div class="stat-label">Comentarios</div>
+    </div>
+    
+    <div class="stat-card fade-in">
+        <div class="stat-icon">❤️</div>
+        <div class="stat-number">{{ total_favoritos }}</div>
+        <div class="stat-label">Favoritos</div>
+    </div>
+    
+    <div class="stat-card fade-in">
+        <div class="stat-icon">⭐</div>
+        <div class="stat-number">{{ valoracion_promedio }}/5</div>
+        <div class="stat-label">Valoración Promedio</div>
+    </div>
+</div>
+
+<!-- Gráficos y Tablas -->
+<div class="content-wrapper mt-4">
+    <h2 class="page-title">📈 Carreras por Categoría</h2>
+    <div class="chart-container">
+        {% for item in carreras_por_categoria %}
+        <div class="chart-bar-item">
+            <div class="chart-label">{{ item.categoria }}</div>
+            <div class="chart-bar-wrapper">
+                <div class="chart-bar" style="width: {{ (item.total / total_carreras * 100) }}%;">
+                    <span class="chart-value">{{ item.total }}</span>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="content-wrapper mt-4">
+    <h2 class="page-title">🌍 Top 10 Países con Más Carreras</h2>
+    <div class="chart-container">
+        {% for item in carreras_por_pais %}
+        <div class="chart-bar-item">
+            <div class="chart-label">{{ item.pais }}</div>
+            <div class="chart-bar-wrapper">
+                <div class="chart-bar" style="width: {{ (item.total / total_carreras * 100) }}%;">
+                    <span class="chart-value">{{ item.total }}</span>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="content-wrapper mt-4">
+    <h2 class="page-title">🔥 Carreras Más Comentadas</h2>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Posición</th>
+                    <th>Carrera</th>
+                    <th>País</th>
+                    <th>Comentarios</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for carrera in carreras_mas_comentadas %}
+                <tr>
+                    <td>
+                        {% if loop.index == 1 %}🥇
+                        {% elif loop.index == 2 %}🥈
+                        {% elif loop.index == 3 %}🥉
+                        {% else %}{{ loop.index }}
+                        {% endif %}
+                    </td>
+                    <td><strong>{{ carrera.nombre }}</strong></td>
+                    <td>{{ carrera.pais }}</td>
+                    <td><span class="badge badge-info">{{ carrera.total_comentarios }}</span></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="content-wrapper mt-4">
+    <h2 class="page-title">⭐ Carreras Mejor Valoradas</h2>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Posición</th>
+                    <th>Carrera</th>
+                    <th>País</th>
+                    <th>Valoración</th>
+                    <th>Votos</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for carrera in carreras_mejor_valoradas %}
+                <tr>
+                    <td>
+                        {% if loop.index == 1 %}🥇
+                        {% elif loop.index == 2 %}🥈
+                        {% elif loop.index == 3 %}🥉
+                        {% else %}{{ loop.index }}
+                        {% endif %}
+                    </td>
+                    <td><strong>{{ carrera.nombre }}</strong></td>
+                    <td>{{ carrera.pais }}</td>
+                    <td>
+                        <span class="rating-display">
+                            {% for i in range(carrera.valoracion_promedio|round|int) %}⭐{% endfor %}
+                            {{ "%.1f"|format(carrera.valoracion_promedio) }}/5
+                        </span>
+                    </td>
+                    <td><span class="badge badge-success">{{ carrera.total_valoraciones }}</span></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="text-center mt-4 mb-4">
+    <a href="/" class="btn btn-primary">⬅️ Volver al Inicio</a>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Animación de barras
+document.addEventListener('DOMContentLoaded', function() {
+    const bars = document.querySelectorAll('.chart-bar');
+    bars.forEach((bar, index) => {
+        setTimeout(() => {
+            bar.style.opacity = '0';
+            bar.style.width = '0';
+            setTimeout(() => {
+                bar.style.transition = 'all 1s ease';
+                bar.style.opacity = '1';
+                bar.style.width = bar.getAttribute('style').match(/width:\s*(\d+%)/)[1];
+            }, 50);
+        }, index * 100);
+    });
+});
+</script>
+{% endblock %}

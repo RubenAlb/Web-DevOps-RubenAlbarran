@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Borrar Carrerita - Gestión de Carreritas</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <h1>🎓 Sistema de Gestión de Carreritas</h1>
+            <p class="header-subtitle">Administra las carreras de tu institución</p>
+        </div>
+    </header>
+
+    <!-- Navegación -->
+    <nav>
+        <div class="nav-content">
+            <ul>
+                <li><a href="/">🏠 Inicio</a></li>
+                <li><a href="/carreritas">📋 Ver Carreritas</a></li>
+                <li><a href="/insert_carrerita">➕ Insertar</a></li>
+                <li><a href="/actualizar_carrerita">✏️ Actualizar</a></li>
+                <li><a href="/borrar_carrerita" class="active">🗑️ Borrar</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Contenido Principal -->
+    <main>
+        <div class="container">
+            <div class="content-wrapper">
+                <h1 class="page-title">🗑️ Borrar Carrerita</h1>
+                
+                <h2>Selecciona una Carrerita para borrar</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre de Carrera</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for carrerita in carreritas %}
+                        <tr>
+                            <td>{{ carrerita.id }}</td>
+                            <td>{{ carrerita.nombre_carrera }}</td>
+                            <td>
+                                <form action="/do_borrar_carrerita" method="post" style="display:inline;">
+                                    <input type="hidden" name="id" value="{{ carrerita.id }}">
+                                    <button type="submit" class="btn-danger" onclick="return confirm('¿Estás seguro de borrar esta carrerita?')">🗑️ Borrar</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                
+                <br>
+                <a href="/" class="link-button">⬅️ Volver al menú principal</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Sistema de Gestión de Carreritas - Rubén Albarrán</p>
+            <hr class="footer-divider">
+            <div class="footer-info">
+                <span>FastAPI + Python</span>
+                <span>|</span>
+                <span>CRUD Simple</span>
+                <span>|</span>
+                <span>Versión 1.0</span>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

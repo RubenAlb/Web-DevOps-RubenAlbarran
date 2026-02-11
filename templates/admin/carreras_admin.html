@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block title %}Administrar Carreras - Racing World{% endblock %}
+
+{% block content %}
+<div class="admin-container">
+    <div class="admin-header">
+        <h1 class="page-title">🔧 Panel de Administración - Carreras</h1>
+        <a href="/admin/carreras/nueva" class="btn btn-primary">
+            ➕ Nueva Carrera
+        </a>
+    </div>
+
+    {% if carreras %}
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>País</th>
+                    <th>Ciudad</th>
+                    <th>Categoría</th>
+                    <th>Longitud (km)</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for carrera in carreras %}
+                <tr>
+                    <td>{{ carrera.id }}</td>
+                    <td><strong>{{ carrera.nombre }}</strong></td>
+                    <td>{{ carrera.pais }}</td>
+                    <td>{{ carrera.ciudad }}</td>
+                    <td><span class="badge badge-primary">{{ carrera.categoria }}</span></td>
+                    <td>{{ carrera.longitud_circuito if carrera.longitud_circuito else 'N/A' }} km</td>
+                    <td>
+                        <div class="btn-group-small">
+                            <a href="/carreras/{{ carrera.id }}" class="btn btn-secondary btn-sm" target="_blank">
+                                👁️ Ver
+                            </a>
+                            <a href="/admin/carreras/{{ carrera.id }}/editar" class="btn btn-primary btn-sm">
+                                ✏️ Editar
+                            </a>
+                            <form method="POST" action="/admin/carreras/{{ carrera.id }}/eliminar" 
+                                  style="display: inline;" 
+                                  onsubmit="return confirm('¿Estás seguro de eliminar esta carrera? Se eliminarán también sus comentarios y favoritos.');">
+                                <button type="submit" class="btn btn-danger btn-sm">
+                                    🗑️ Eliminar
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <p>No hay carreras registradas. <a href="/admin/carreras/nueva">Crear la primera carrera</a></p>
+    </div>
+    {% endif %}
+
+    <div class="admin-actions">
+        <a href="/" class="btn btn-secondary">⬅️ Volver al Inicio</a>
+    </div>
+</div>
+
+<style>
+.admin-container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.btn-group-small {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.btn-sm {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+}
+
+.empty-state {
+    background: var(--white);
+    padding: 3rem;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: var(--shadow);
+}
+
+.admin-actions {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+table {
+    font-size: 0.95rem;
+}
+
+td, th {
+    padding: 0.8rem;
+}
+</style>
+{% endblock %}

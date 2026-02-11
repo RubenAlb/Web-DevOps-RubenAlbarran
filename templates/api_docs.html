@@ -1,0 +1,328 @@
+{% extends "base.html" %}
+
+{% block title %}API Documentation - Racing World{% endblock %}
+
+{% block content %}
+<div class="api-docs-container">
+    <h1 class="page-title">📡 API REST Documentation</h1>
+    <p class="page-subtitle">Accede a los datos de Racing World mediante nuestra API REST en formato JSON</p>
+
+    <!-- Base URL -->
+    <div class="api-section">
+        <h2>🔗 Base URL</h2>
+        <div class="code-block">
+            <code>http://127.0.0.1:8000/api/v1</code>
+        </div>
+    </div>
+
+    <!-- Endpoints de Carreras -->
+    <div class="api-section">
+        <h2>🏁 Carreras</h2>
+        
+        <div class="endpoint-card">
+            <div class="endpoint-header">
+                <span class="method get">GET</span>
+                <span class="endpoint-path">/carreras</span>
+            </div>
+            <p class="endpoint-description">Obtener listado de carreras</p>
+            
+            <h4>Parámetros (Query):</h4>
+            <ul class="params-list">
+                <li><strong>search</strong> (opcional): Búsqueda por nombre o país</li>
+                <li><strong>categoria</strong> (opcional): Filtrar por categoría (F1, Rally, Resistencia, Montaña)</li>
+                <li><strong>pais</strong> (opcional): Filtrar por país</li>
+                <li><strong>limit</strong> (opcional): Número de resultados (default: 10)</li>
+                <li><strong>offset</strong> (opcional): Offset para paginación (default: 0)</li>
+            </ul>
+            
+            <h4>Ejemplo:</h4>
+            <div class="code-block">
+                <code>GET /api/v1/carreras?categoria=F1&limit=5</code>
+            </div>
+            
+            <h4>Respuesta:</h4>
+            <div class="code-block">
+<pre>{
+  "success": true,
+  "data": [
+    {
+      "id": 1,
+      "nombre": "Monaco Grand Prix",
+      "pais": "Monaco",
+      "categoria": "F1",
+      "descripcion": "...",
+      "longitud_km": 3.337
+    }
+  ],
+  "count": 1
+}</pre>
+            </div>
+        </div>
+
+        <div class="endpoint-card">
+            <div class="endpoint-header">
+                <span class="method get">GET</span>
+                <span class="endpoint-path">/carreras/{carrera_id}</span>
+            </div>
+            <p class="endpoint-description">Obtener detalle de una carrera específica</p>
+            
+            <h4>Ejemplo:</h4>
+            <div class="code-block">
+                <code>GET /api/v1/carreras/1</code>
+            </div>
+        </div>
+
+        <div class="endpoint-card">
+            <div class="endpoint-header">
+                <span class="method get">GET</span>
+                <span class="endpoint-path">/carreras/{carrera_id}/comentarios</span>
+            </div>
+            <p class="endpoint-description">Obtener comentarios de una carrera</p>
+            
+            <h4>Ejemplo:</h4>
+            <div class="code-block">
+                <code>GET /api/v1/carreras/1/comentarios</code>
+            </div>
+        </div>
+    </div>
+
+    <!-- Endpoints de Calendario -->
+    <div class="api-section">
+        <h2>📅 Calendario</h2>
+        
+        <div class="endpoint-card">
+            <div class="endpoint-header">
+                <span class="method get">GET</span>
+                <span class="endpoint-path">/calendario</span>
+            </div>
+            <p class="endpoint-description">Obtener próximos eventos del calendario</p>
+            
+            <h4>Parámetros:</h4>
+            <ul class="params-list">
+                <li><strong>limit</strong> (opcional): Número de eventos (default: 20)</li>
+            </ul>
+            
+            <h4>Ejemplo:</h4>
+            <div class="code-block">
+                <code>GET /api/v1/calendario?limit=10</code>
+            </div>
+        </div>
+    </div>
+
+    <!-- Endpoints de Estadísticas -->
+    <div class="api-section">
+        <h2>📊 Estadísticas</h2>
+        
+        <div class="endpoint-card">
+            <div class="endpoint-header">
+                <span class="method get">GET</span>
+                <span class="endpoint-path">/estadisticas</span>
+            </div>
+            <p class="endpoint-description">Obtener estadísticas generales del sistema</p>
+            
+            <h4>Respuesta incluye:</h4>
+            <ul class="params-list">
+                <li>Total de carreras, usuarios y comentarios</li>
+                <li>Valoración promedio</li>
+                <li>Carreras por categoría</li>
+            </ul>
+            
+            <h4>Ejemplo:</h4>
+            <div class="code-block">
+                <code>GET /api/v1/estadisticas</code>
+            </div>
+        </div>
+    </div>
+
+    <!-- Endpoints Auxiliares -->
+    <div class="api-section">
+        <h2>🛠️ Auxiliares</h2>
+        
+        <div class="endpoint-card">
+            <div class="endpoint-header">
+                <span class="method get">GET</span>
+                <span class="endpoint-path">/paises</span>
+            </div>
+            <p class="endpoint-description">Obtener lista de países únicos</p>
+        </div>
+
+        <div class="endpoint-card">
+            <div class="endpoint-header">
+                <span class="method get">GET</span>
+                <span class="endpoint-path">/categorias</span>
+            </div>
+            <p class="endpoint-description">Obtener lista de categorías únicas</p>
+        </div>
+    </div>
+
+    <!-- Ejemplos de uso -->
+    <div class="api-section">
+        <h2>💻 Ejemplos de Uso</h2>
+        
+        <h3>JavaScript (Fetch API)</h3>
+        <div class="code-block">
+<pre>fetch('http://127.0.0.1:8000/api/v1/carreras?categoria=F1')
+  .then(response => response.json())
+  .then(data => {
+    console.log(data.data);
+  });</pre>
+        </div>
+
+        <h3>Python (requests)</h3>
+        <div class="code-block">
+<pre>import requests
+
+response = requests.get('http://127.0.0.1:8000/api/v1/carreras')
+data = response.json()
+print(data['data'])</pre>
+        </div>
+
+        <h3>cURL</h3>
+        <div class="code-block">
+<pre>curl -X GET "http://127.0.0.1:8000/api/v1/carreras?search=monaco"</pre>
+        </div>
+    </div>
+
+    <!-- Documentación interactiva -->
+    <div class="api-section">
+        <h2>📖 Documentación Interactiva</h2>
+        <p>FastAPI genera automáticamente documentación interactiva Swagger UI:</p>
+        <div class="docs-links">
+            <a href="/docs" target="_blank" class="btn btn-primary">
+                📄 Swagger UI (/docs)
+            </a>
+            <a href="/redoc" target="_blank" class="btn btn-secondary">
+                📑 ReDoc (/redoc)
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+.api-docs-container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.api-section {
+    background: var(--white);
+    padding: 2rem;
+    border-radius: 15px;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow);
+}
+
+.api-section h2 {
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    border-bottom: 3px solid var(--primary-color);
+    padding-bottom: 0.5rem;
+}
+
+.endpoint-card {
+    background: var(--light-bg);
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin-bottom: 1.5rem;
+    border-left: 4px solid var(--primary-color);
+}
+
+.endpoint-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.method {
+    padding: 0.3rem 0.8rem;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 0.85rem;
+    color: white;
+}
+
+.method.get {
+    background-color: #27ae60;
+}
+
+.method.post {
+    background-color: #3498db;
+}
+
+.method.put {
+    background-color: #f39c12;
+}
+
+.method.delete {
+    background-color: #e74c3c;
+}
+
+.endpoint-path {
+    font-family: monospace;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: var(--secondary-color);
+}
+
+.endpoint-description {
+    color: var(--gray);
+    margin-bottom: 1rem;
+}
+
+.params-list {
+    list-style-position: inside;
+    margin-bottom: 1rem;
+    line-height: 1.8;
+}
+
+.code-block {
+    background: var(--secondary-color);
+    color: #00ff00;
+    padding: 1rem;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 1rem 0;
+    font-family: 'Courier New', monospace;
+}
+
+.code-block code,
+.code-block pre {
+    color: #00ff00;
+    background: transparent;
+    font-size: 0.9rem;
+    white-space: pre-wrap;
+}
+
+.docs-links {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.docs-links .btn {
+    flex: 1;
+    text-align: center;
+    padding: 1rem;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: var(--primary-color);
+    color: white;
+}
+
+.btn-secondary {
+    background: var(--secondary-color);
+    color: white;
+}
+
+.docs-links .btn:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-hover);
+}
+</style>
+{% endblock %}

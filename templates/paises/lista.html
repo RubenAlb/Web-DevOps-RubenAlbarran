@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Países - Racing World{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h1>🌍 Países con Carreras</h1>
+    <p>Explora las carreras organizadas en cada país del mundo</p>
+</div>
+
+<div class="cards-grid">
+    {% for pais in paises %}
+    <div class="card fade-in">
+        <div class="card-header">
+            <h2 class="card-title">{{ pais.bandera }} {{ pais.nombre }}</h2>
+            <span class="badge badge-primary">{{ pais.total_carreras }} carreras</span>
+        </div>
+        <div class="card-body">
+            <div class="card-info">
+                <div class="info-row">
+                    <span class="info-label">Continente:</span>
+                    <span class="info-value">{{ pais.continente }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Carreras famosas:</span>
+                    <span class="info-value">{{ pais.carreras_destacadas }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Primera carrera:</span>
+                    <span class="info-value">{{ pais.primera_carrera_año }}</span>
+                </div>
+            </div>
+        </div>
+        <div class="btn-group">
+            <a href="/paises/{{ pais.id }}" class="btn btn-primary">Ver Detalles</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

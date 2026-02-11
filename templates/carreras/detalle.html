@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+
+{% block title %}{{ carrera.nombre }} - Racing World{% endblock %}
+
+{% block content %}
+<div class="detalle-carrera fade-in">
+    <div class="detalle-header">
+        <h1>{{ carrera.nombre }}</h1>
+        <p class="pais">📍 {{ carrera.pais }}</p>
+        <div class="badge-group mt-2">
+            <span class="badge badge-primary">{{ carrera.categoria }}</span>
+            <span class="badge badge-info">{{ carrera.fecha }}</span>
+            {% if valoracion_promedio > 0 %}
+            <span class="badge badge-success">⭐ {{ valoracion_promedio }}/5</span>
+            {% endif %}
+        </div>
+        
+        <!-- Etiquetas -->
+        {% if tags %}
+        <div class="mt-3">
+            <strong>Etiquetas:</strong>
+            {% for tag in tags %}
+            <a href="/tags/{{ tag.id }}" class="text-decoration-none">
+                <span class="badge" style="background-color: {{ tag.color }}; margin: 2px;">
+                    <i class="fas fa-tag"></i> {{ tag.nombre }}
+                </span>
+            </a>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        <!-- Botón de Favorito -->
+        {% if usuario %}
+        <form method="post" action="/carreras/{{ carrera.id }}/favorito" class="mt-2">
+            <button type="submit" class="btn {% if es_favorito %}btn-danger{% else %}btn-success{% endif %}">
+                {% if es_favorito %}💔 Quitar de Favoritos{% else %}❤️ Agregar a Favoritos{% endif %}
+            </button>
+        </form>
+        {% endif %}
+    </div>
+
+    <div class="detalle-content">
+        <!-- Información General -->
+        <div class="detalle-section">
+            <h2>📋 Información General</h2>
+            <div class="info-row">
+                <span class="info-label">Nombre:</span>
+                <span class="info-value">{{ carrera.nombre }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">País:</span>
+                <span class="info-value">{{ carrera.pais }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Ciudad:</span>
+                <span class="info-value">{{ carrera.ciudad }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Fecha:</span>
+                <span class="info-value">{{ carrera.fecha }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Categoría:</span>
+                <span class="info-value">{{ carrera.categoria }}</span>
+            </div>
+        </div>
+
+        <!-- Datos del Circuito -->
+        <div class="detalle-section">
+            <h2>🏁 Datos del Circuito</h2>
+            <div class="info-row">
+                <span class="info-label">Longitud:</span>
+                <span class="info-value">{{ carrera.longitud_circuito }} km</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Número de vueltas:</span>
+                <span class="info-value">{{ carrera.numero_vueltas }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Récord de vuelta:</span>
+                <span class="info-value">{{ carrera.record_vuelta }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Total de curvas:</span>
+                <span class="info-value">{{ carrera.total_curvas }}</span>
+            </div>
+        </div>
+
+        <!-- Descripción -->
+        <div class="detalle-section detalle-full-width">
+            <h2>📖 Descripción</h2>
+            <p>{{ carrera.descripcion }}</p>
+        </div>
+
+        <!-- Historia -->
+        <div class="detalle-section detalle-full-width">
+            <h2>📜 Historia</h2>
+            <p>{{ carrera.historia }}</p>
+            
+            <h3>🏆 Datos Históricos</h3>
+            <ul>
+                <li>Primera edición: {{ carrera.primera_edicion }}</li>
+                <li>Campeón más exitoso: {{ carrera.campeon_mas_exitoso }}</li>
+                <li>Victorias récord: {{ carrera.victorias_record }}</li>
+                <li>Asistencia récord: {{ carrera.asistencia_record }} espectadores</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Comentarios y Valoraciones -->
+    <div class="detalle-section mt-4">
+        <h2>💬 Comentarios y Valoraciones</h2>
+        
+        {% if usuario %}
+        <!-- Formulario para agregar comentario -->
+        <div class="comentario-form">
+            <h3>✍️ Deja tu comentario</h3>
+            <form method="post" action="/carreras/{{ carrera.id }}/comentario">
+                <div class="form-group">
+                    <label for="valoracion">Tu valoración:</label>
+                    <select id="valoracion" name="valoracion" required>
+                        <option value="5">⭐⭐⭐⭐⭐ Excelente</option>
+                        <option value="4">⭐⭐⭐⭐ Muy buena</option>
+                        <option value="3">⭐⭐⭐ Buena</option>
+                        <option value="2">⭐⭐ Regular</option>
+                        <option value="1">⭐ Mala</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="comentario">Tu comentario:</label>
+                    <textarea id="comentario" name="comentario" rows="4" required placeholder="Comparte tu experiencia..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Publicar Comentario</button>
+            </form>
+        </div>
+        {% else %}
+        <p class="mt-2"><a href="/auth/login">Inicia sesión</a> para dejar un comentario.</p>
+        {% endif %}
+
+        <!-- Lista de comentarios -->
+        <div class="comentarios-lista mt-4">
+            <h3>📝 Comentarios ({{ comentarios|length }})</h3>
+            {% if comentarios %}
+                {% for comentario in comentarios %}
+                <div class="comentario-card mt-3">
+                    <div class="comentario-header">
+                        <strong>👤 {{ comentario.username }}</strong>
+                        <span class="comentario-valoracion">
+                            {% for i in range(comentario.valoracion) %}⭐{% endfor %}
+                        </span>
+                    </div>
+                    <p class="comentario-texto">{{ comentario.comentario }}</p>
+                    <small class="comentario-fecha">{{ comentario.created_at.strftime('%d/%m/%Y %H:%M') }}</small>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p class="mt-2">No hay comentarios aún. ¡Sé el primero en comentar!</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="btn-group mt-4">
+        <a href="/carreras" class="btn btn-secondary">⬅️ Volver a Carreras</a>
+        {% if usuario and usuario.is_admin %}
+        <a href="/admin/carreras/{{ carrera.id }}/editar" class="btn btn-primary">✏️ Editar</a>
+        <a href="/admin/carreras/{{ carrera.id }}/eliminar" class="btn btn-danger">🗑️ Eliminar</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Juego</title>
+</head>
+<body>
+    <h1>Juego</h1>
+    <form action="/juego" method="post">
+        <label for="numero">Introduce un número:</label>
+        <input type="number" id="numero" name="numero" required>
+        <button type="submit">Enviar</button>
+    </form>
+    <div>{{ mensaje }}</div>
+</body>
+</html>

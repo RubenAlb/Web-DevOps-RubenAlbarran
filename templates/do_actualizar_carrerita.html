@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrerita Actualizada - Gestión de Carreritas</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <h1>🎓 Sistema de Gestión de Carreritas</h1>
+            <p class="header-subtitle">Administra las carreras de tu institución</p>
+        </div>
+    </header>
+
+    <!-- Navegación -->
+    <nav>
+        <div class="nav-content">
+            <ul>
+                <li><a href="/">🏠 Inicio</a></li>
+                <li><a href="/carreritas">📋 Ver Carreritas</a></li>
+                <li><a href="/insert_carrerita">➕ Insertar</a></li>
+                <li><a href="/actualizar_carrerita" class="active">✏️ Actualizar</a></li>
+                <li><a href="/borrar_carrerita">🗑️ Borrar</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Contenido Principal -->
+    <main>
+        <div class="container">
+            <div class="content-wrapper">
+                <div class="mensaje-exito">
+                    <h1>✓ Carrerita Actualizada Correctamente</h1>
+                    <p>La carrerita ha sido actualizada exitosamente en la base de datos.</p>
+                </div>
+                
+                <br>
+                <a href="/carreritas" class="link-button">📋 Ver todas las carreritas</a>
+                <a href="/actualizar_carrerita" class="link-button">✏️ Actualizar otra carrerita</a>
+                <a href="/" class="link-button">🏠 Volver al menú principal</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Sistema de Gestión de Carreritas - Rubén Albarrán</p>
+            <hr class="footer-divider">
+            <div class="footer-info">
+                <span>FastAPI + Python</span>
+                <span>|</span>
+                <span>CRUD Simple</span>
+                <span>|</span>
+                <span>Versión 1.0</span>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

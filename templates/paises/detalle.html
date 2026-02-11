@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}{{ pais.nombre }} - Racing World{% endblock %}
+
+{% block content %}
+<div class="pais-banner">
+    <div class="flag">{{ pais.bandera }}</div>
+    <h1>{{ pais.nombre }}</h1>
+</div>
+
+<div class="content-wrapper fade-in">
+    <div class="pais-info">
+        <div class="stats-box">
+            <h3>📊 Estadísticas</h3>
+            <div class="stat-item">
+                <span class="stat-label">Total de carreras:</span>
+                <span class="stat-value">{{ pais.total_carreras }}</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Circuitos:</span>
+                <span class="stat-value">{{ pais.total_circuitos }}</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Primera carrera:</span>
+                <span class="stat-value">{{ pais.primera_carrera_año }}</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Continente:</span>
+                <span class="stat-value">{{ pais.continente }}</span>
+            </div>
+        </div>
+
+        <div class="stats-box">
+            <h3>🏆 Récords</h3>
+            <div class="stat-item">
+                <span class="stat-label">Campeones locales:</span>
+                <span class="stat-value">{{ pais.campeones_locales }}</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Victorias totales:</span>
+                <span class="stat-value">{{ pais.victorias_totales }}</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Asistencia promedio:</span>
+                <span class="stat-value">{{ pais.asistencia_promedio }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="detalle-section mt-3">
+        <h2>📖 Sobre las carreras en {{ pais.nombre }}</h2>
+        <p>{{ pais.descripcion }}</p>
+    </div>
+
+    <div class="detalle-section mt-3">
+        <h2>🏁 Carreras Principales</h2>
+        <div class="carreras-list">
+            {% for carrera in pais.carreras %}
+            <div class="carrera-card">
+                <div class="carrera-image">🏎️</div>
+                <div class="carrera-content">
+                    <h3 class="carrera-nombre">{{ carrera.nombre }}</h3>
+                    <p>{{ carrera.descripcion_corta }}</p>
+                    <a href="/carreras/{{ carrera.id }}" class="btn btn-primary mt-2">Ver Detalles</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="detalle-section mt-3">
+        <h2>💡 Datos Curiosos</h2>
+        <div class="curiosidades-grid">
+            {% for dato in pais.datos_curiosos %}
+            <div class="curiosidad-card">
+                <div class="curiosidad-icon">{{ dato.icono }}</div>
+                <h3>{{ dato.titulo }}</h3>
+                <p>{{ dato.descripcion }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="btn-group mt-4">
+        <a href="/paises" class="btn btn-secondary">⬅️ Volver a Países</a>
+    </div>
+</div>
+{% endblock %}

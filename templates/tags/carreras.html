@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}{{ tag.nombre }} - Carreras - Racing World{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Inicio</a></li>
+                    <li class="breadcrumb-item"><a href="/tags">Etiquetas</a></li>
+                    <li class="breadcrumb-item active">{{ tag.nombre }}</li>
+                </ol>
+            </nav>
+            
+            <h1 class="mb-4">
+                <span class="badge" style="background-color: {{ tag.color }}">
+                    <i class="fas fa-tag"></i> {{ tag.nombre }}
+                </span>
+            </h1>
+            
+            <p class="lead">Carreras con la etiqueta "{{ tag.nombre }}"</p>
+            
+            <div class="row">
+                {% if carreras %}
+                    {% for carrera in carreras %}
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ carrera.nombre }}</h5>
+                                <p class="card-text">
+                                    <i class="fas fa-map-marker-alt"></i> {{ carrera.ciudad }}, {{ carrera.pais }}<br>
+                                    <i class="fas fa-calendar"></i> {{ carrera.fecha }}<br>
+                                    {% if carrera.categoria %}
+                                    <span class="badge bg-secondary">{{ carrera.categoria }}</span>
+                                    {% endif %}
+                                </p>
+                            </div>
+                            <div class="card-footer bg-transparent">
+                                <a href="/carreras/{{ carrera.id }}" class="btn btn-primary btn-sm w-100">
+                                    <i class="fas fa-eye"></i> Ver Detalles
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="col-12">
+                        <div class="alert alert-info">
+                            No hay carreras con esta etiqueta todavía.
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="mt-4">
+                <a href="/tags" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Volver a Etiquetas
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

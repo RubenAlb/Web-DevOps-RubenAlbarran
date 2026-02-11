@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Mis Favoritos - Racing World{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h1>❤️ Mis Carreras Favoritas</h1>
+    <p>Tus carreras guardadas en un solo lugar</p>
+</div>
+
+<div class="carreras-list">
+    {% if favoritos %}
+        {% for carrera in favoritos %}
+        <div class="carrera-card fade-in">
+            <div class="carrera-image">
+                🏎️
+            </div>
+            <div class="carrera-content">
+                <h2 class="carrera-nombre">{{carrera.nombre }}</h2>
+                <p class="carrera-pais">📍 {{ carrera.pais }}</p>
+                <p>{{ carrera.descripcion_corta }}</p>
+                <div class="carrera-meta">
+                    <span class="badge badge-primary">{{ carrera.categoria }}</span>
+                    <span>📅 {{ carrera.fecha }}</span>
+                </div>
+                <div class="btn-group mt-2">
+                    <a href="/carreras/{{ carrera.id }}" class="btn btn-primary">Ver Detalles</a>
+                    <form method="post" action="/carreras/{{ carrera.id }}/favorito" style="display: inline;">
+                        <button type="submit" class="btn btn-danger">💔 Quitar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="content-wrapper text-center">
+            <div class="curiosidad-icon" style="font-size: 5rem;">💔</div>
+            <h2>No tienes carreras favoritas aún</h2>
+            <p class="mt-2">Explora nuestro catálogo y marca tus carreras favoritas</p>
+            <a href="/carreras" class="btn btn-primary mt-3">🏁 Ver Todas las Carreras</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
